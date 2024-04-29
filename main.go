@@ -6,6 +6,7 @@ import (
 	"sort"
 
 	sorting "github.com/f3rcho/algorithms/sort"
+	"github.com/f3rcho/algorithms/swap"
 )
 
 func diagonalDiference(arr [][]float64) float64 {
@@ -26,7 +27,11 @@ func main() {
 		{Name: "James", Age: 25},
 	}
 	sort.Sort(sorting.AgeFactor(audience))
-	fmt.Println(audience)
+	// fmt.Println(audience)
+
+	listObj := []int{1, 2, 3}
+	swap.SwapContents(listObj)
+	fmt.Println(listObj)
 	// arr := [][]float64{
 	// 	{11, 2, 4},
 	// 	{4, 5, 6},
