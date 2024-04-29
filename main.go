@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"math"
+	"sort"
+
+	sorting "github.com/f3rcho/algorithms/sort"
 )
 
 func diagonalDiference(arr [][]float64) float64 {
@@ -17,12 +20,19 @@ func diagonalDiference(arr [][]float64) float64 {
 }
 
 func main() {
-	arr := [][]float64{
-		{11, 2, 4},
-		{4, 5, 6},
-		{10, 8, -12},
+	audience := []sorting.Human{
+		{Name: "Alice", Age: 35},
+		{Name: "Bob", Age: 45},
+		{Name: "James", Age: 25},
 	}
-	fmt.Println(diagonalDiference(arr)) // Output: 15.0
+	sort.Sort(sorting.AgeFactor(audience))
+	fmt.Println(audience)
+	// arr := [][]float64{
+	// 	{11, 2, 4},
+	// 	{4, 5, 6},
+	// 	{10, 8, -12},
+	// }
+	// fmt.Println(diagonalDiference(arr)) // Output: 15.0
 }
 
 // func main() {
