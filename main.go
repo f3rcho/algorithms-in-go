@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"sort"
+	"strings"
 
 	sorting "github.com/f3rcho/algorithms/sort"
 	"github.com/f3rcho/algorithms/swap"
@@ -26,12 +27,15 @@ func main() {
 		{Name: "Bob", Age: 45},
 		{Name: "James", Age: 25},
 	}
+
 	sort.Sort(sorting.AgeFactor(audience))
 	// fmt.Println(audience)
+	containStr := strings.Contains("hello world", "wor")
+	fmt.Println(containStr)
 
 	listObj := []int{1, 2, 3}
 	swap.SwapContents(listObj)
-	fmt.Println(listObj)
+	// fmt.Println(listObj)
 	// arr := [][]float64{
 	// 	{11, 2, 4},
 	// 	{4, 5, 6},
