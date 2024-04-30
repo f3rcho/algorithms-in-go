@@ -2,42 +2,56 @@ package main
 
 import (
 	"fmt"
-	"math"
-	"sync"
 )
 
-func diagonalDiference(arr [][]float64) float64 {
-	var primaryDiagonal, secondaryDiagonal float64
-	for i := 0; i < len(arr); i++ {
-		primaryDiagonal += arr[i][i]
-		fmt.Println(arr[i][i], "pri")
-		secondaryDiagonal += arr[i][len(arr)-i-1]
-		fmt.Println(arr[i][len(arr)-i-1], "sec")
-	}
-	return math.Abs(primaryDiagonal - secondaryDiagonal)
-}
-
 func main() {
-	ch := make(chan *int, 4)
-	array := []int{1, 2, 3, 4}
-	wg := sync.WaitGroup{}
-	// Add the number of works equal to the number of array elements.
-	wg.Add(len(array))
-	go func() {
-		for _, value := range array {
-			ch <- &value
-		}
-	}()
-	go func() {
-		for value := range ch {
-			fmt.Println(*value)
-			// Decrement the waitgroup counter with each iteration.
-			wg.Done()
-		}
-	}()
-
-	wg.Wait()
+	x := []int{1, 2, 3, 4, 5}
+	x = append(x, 6)
+	x = append(x, 7)
+	a := x[4:]
+	y := alterSlice(a)
+	fmt.Println(x)
+	fmt.Println(y)
 }
+
+func alterSlice(a []int) []int {
+	a[0] = 10
+	a = append(a, 11)
+	return a
+}
+
+// func diagonalDiference(arr [][]float64) float64 {
+// 	var primaryDiagonal, secondaryDiagonal float64
+// 	for i := 0; i < len(arr); i++ {
+// 		primaryDiagonal += arr[i][i]
+// 		fmt.Println(arr[i][i], "pri")
+// 		secondaryDiagonal += arr[i][len(arr)-i-1]
+// 		fmt.Println(arr[i][len(arr)-i-1], "sec")
+// 	}
+// 	return math.Abs(primaryDiagonal - secondaryDiagonal)
+// }
+
+// func main() {
+// 	ch := make(chan *int, 4)
+// 	array := []int{1, 2, 3, 4}
+// 	wg := sync.WaitGroup{}
+// 	// Add the number of works equal to the number of array elements.
+// 	wg.Add(len(array))
+// 	go func() {
+// 		for _, value := range array {
+// 			ch <- &value
+// 		}
+// 	}()
+// 	go func() {
+// 		for value := range ch {
+// 			fmt.Println(*value)
+// 			// Decrement the waitgroup counter with each iteration.
+// 			wg.Done()
+// 		}
+// 	}()
+
+// 	wg.Wait()
+// }
 
 // func main() {
 // 	audience := []sorting.Human{
