@@ -3,11 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
-	"sort"
-	"strings"
-
-	sorting "github.com/f3rcho/algorithms/sort"
-	"github.com/f3rcho/algorithms/swap"
+	"sync"
 )
 
 func diagonalDiference(arr [][]float64) float64 {
@@ -22,27 +18,49 @@ func diagonalDiference(arr [][]float64) float64 {
 }
 
 func main() {
-	audience := []sorting.Human{
-		{Name: "Alice", Age: 35},
-		{Name: "Bob", Age: 45},
-		{Name: "James", Age: 25},
-	}
+	ch := make(chan *int, 4)
+	array := []int{1, 2, 3, 4}
+	wg := sync.WaitGroup{}
+	// Add the number of works equal to the number of array elements.
+	wg.Add(len(array))
+	go func() {
+		for _, value := range array {
+			ch <- &value
+		}
+	}()
+	go func() {
+		for value := range ch {
+			fmt.Println(*value)
+			// Decrement the waitgroup counter with each iteration.
+			wg.Done()
+		}
+	}()
 
-	sort.Sort(sorting.AgeFactor(audience))
-	// fmt.Println(audience)
-	containStr := strings.Contains("hello world", "wor")
-	fmt.Println(containStr)
-
-	listObj := []int{1, 2, 3}
-	swap.SwapContents(listObj)
-	// fmt.Println(listObj)
-	// arr := [][]float64{
-	// 	{11, 2, 4},
-	// 	{4, 5, 6},
-	// 	{10, 8, -12},
-	// }
-	// fmt.Println(diagonalDiference(arr)) // Output: 15.0
+	wg.Wait()
 }
+
+// func main() {
+// 	audience := []sorting.Human{
+// 		{Name: "Alice", Age: 35},
+// 		{Name: "Bob", Age: 45},
+// 		{Name: "James", Age: 25},
+// 	}
+
+// 	sort.Sort(sorting.AgeFactor(audience))
+// 	// fmt.Println(audience)
+// 	containStr := strings.Contains("hello world", "wor")
+// 	fmt.Println(containStr)
+
+// 	listObj := []int{1, 2, 3}
+// 	swap.SwapContents(listObj)
+// 	// fmt.Println(listObj)
+// 	// arr := [][]float64{
+// 	// 	{11, 2, 4},
+// 	// 	{4, 5, 6},
+// 	// 	{10, 8, -12},
+// 	// }
+// 	// fmt.Println(diagonalDiference(arr)) // Output: 15.0
+// }
 
 // func main() {
 // 	a := []int{2, 4, 6, 4, 2, 7, 6}
