@@ -2,76 +2,101 @@ package main
 
 import (
 	"fmt"
-	"math"
-	"os"
 	"runtime"
-	"runtime/trace"
 	"sync"
 )
 
-const (
-	numberRange     = 1000000 // Range for finding prime numbers.
-	goroutineNumber = 4       // Number of launched goroutines.
-)
+func worker(id int, wg *sync.WaitGroup) {
+	// Lock the current goroutine to an OS thread.
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
+	defer wg.Done()
+
+	for i := 0; i < 5; i++ {
+		fmt.Printf("Worker %d: Iteration %d\n", id, i)
+	}
+}
 
 func main() {
-	// Start tracing.
-	f, _ := os.Create("trace.out")
-	trace.Start(f)
-	defer trace.Stop()
+	// Create a wait group to synchronize goroutines.
+	var wg sync.WaitGroup
 
-	// Set the number of processors to be used.
-	runtime.GOMAXPROCS(4)
+	// Create and start three worker goroutines.
+	for i := 0; i < 3; i++ {
+		wg.Add(1)
+		go worker(i, &wg)
+	}
 
-	// Use WaitGroup to wait for the execution of all goroutines.
-	wg := &sync.WaitGroup{}
-	wg.Add(4)
-	findInRange(wg) // Launch a CPU-bound task
+	// Wait for the worker goroutines to finish.
 	wg.Wait()
 }
 
+// const (
+// 	numberRange     = 1000000 // Range for finding prime numbers.
+// 	goroutineNumber = 4       // Number of launched goroutines.
+// )
+
+// func main() {
+
+// fmt.Println(runtime.NumCPU())
+// // Start tracing.
+// f, _ := os.Create("trace.out")
+// trace.Start(f)
+// defer trace.Stop()
+
+// // Set the number of processors to be used.
+// runtime.GOMAXPROCS(4)
+
+// // Use WaitGroup to wait for the execution of all goroutines.
+// wg := &sync.WaitGroup{}
+// wg.Add(4)
+// findInRange(wg) // Launch a CPU-bound task
+// wg.Wait()
+// }
+
 // Search for prime numbers in 4 ranges.
-func findInRange(wg *sync.WaitGroup) {
-	start := 0
-	end := numberRange
-	for i := 0; i < 4; i++ {
-		go func(i int) {
-			fmt.Println(findPrimeNumbers(start, end))
-			wg.Done()
-		}(i)
-		start += numberRange
-		end += numberRange
-	}
-}
+// func findInRange(wg *sync.WaitGroup) {
+// 	start := 0
+// 	end := numberRange
+// 	for i := 0; i < 4; i++ {
+// 		go func(i int) {
+// 			fmt.Println(findPrimeNumbers(start, end))
+// 			wg.Done()
+// 		}(i)
+// 		start += numberRange
+// 		end += numberRange
+// 	}
+// }
 
-// Function that finds prime numbers in a specified range.
-func findPrimeNumbers(start, end int) []int {
-	var primes []int
+// // Function that finds prime numbers in a specified range.
+// func findPrimeNumbers(start, end int) []int {
+// 	var primes []int
 
-	for num := start; num <= end; num++ {
-		if isPrime(num) {
-			primes = append(primes, num)
-		}
-	}
+// 	for num := start; num <= end; num++ {
+// 		if isPrime(num) {
+// 			primes = append(primes, num)
+// 		}
+// 	}
 
-	return primes
-}
+// 	return primes
+// }
 
 // Check if a number is prime.
-func isPrime(num int) bool {
-	if num < 2 {
-		return false
-	}
+// func isPrime(num int) bool {
+// 	if num < 2 {
+// 		return false
+// 	}
 
-	limit := int(math.Sqrt(float64(num)))
-	for i := 2; i <= limit; i++ {
-		if num%i == 0 {
-			return false
-		}
-	}
+// 	limit := int(math.Sqrt(float64(num)))
+// 	for i := 2; i <= limit; i++ {
+// 		if num%i == 0 {
+// 			return false
+// 		}
+// 	}
 
-	return true
-}
+// 	return true
+// }
 
 // func main() {
 // 	x := []int{1, 2, 3, 4, 5}
